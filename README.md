@@ -1,4 +1,4 @@
-# AN1_2020_base
+# AN1_base
 
 Pour
 - vous montrer deux approches de plans 2D dans Unity
