@@ -21,7 +21,7 @@ public class CharacterMove : MonoBehaviour
     [Tooltip("Gravité positive fait tomber l'objet. Permet de suivre le relief d'un terrain.")]
     public float gravity = 0f;
    
-    private Vector3 vectMove;
+    private Vector3 vectAxis;
     private string inputAxisName;
     private CharacterController chara;
     
@@ -35,13 +35,13 @@ public class CharacterMove : MonoBehaviour
     {
         switch (movement) {
             case MoveAxis.X:
-                vectMove = transform.right;
+                vectAxis = transform.right;
                 break;
             case MoveAxis.Y:
-                vectMove = transform.up;
+                vectAxis = transform.up;
                 break;
             case MoveAxis.Z:
-                vectMove = transform.forward;
+                vectAxis = transform.forward;
                 break;
         }
 
@@ -53,14 +53,15 @@ public class CharacterMove : MonoBehaviour
                 inputAxisName = "Vertical";
                 break;
         }
+
+        Vector3 vectMove = speed * Time.deltaTime * Input.GetAxis(inputAxisName) * vectAxis;
         
-        if(gravity==0f || chara.isGrounded){
-            chara.Move(speed * Input.GetAxis(inputAxisName) * vectMove);
-        }
-        else if (!chara.isGrounded) {
+        if (!chara.isGrounded && gravity>0f) {
             Vector3 vectGravity = new Vector3(0, -gravity * Time.deltaTime,0);
-            chara.Move(speed * Input.GetAxis(inputAxisName) * vectMove + vectGravity);
+            vectMove += vectGravity;
         }
-        
+
+        chara.Move(vectMove);
+
     }
 }
